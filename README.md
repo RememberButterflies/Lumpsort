@@ -17,6 +17,9 @@ Core:   The values not present in any husk in a hump.
 
 Observations:
 Traversing - In any hump, starting from the bottom lump's smallest value, if just the small side of the husks are included until the last lump. That lump is included. Then all the largest husks starting from the top to the bottom are included. That list will be sorted. But, the core remains unsorted. 
-Structure - Max - If there are a maximum number of lumps in a husk, ( (((n-1)/2)+1) 1 single node top lump, and then each other lump is just 1 single node small and large husk ), then following the previous traversing will give a fully sorted list. This is called "all-husk."
+Structure - Max - If there are a maximum number of lumps in a husk, ( (((n-1)/2)+1) 1 single node top lump, and then each other lump is just 1 single node small and large husk ), then following the previous traversing will give a fully sorted list. When a hump has no core, it is called "all-husk."
 Structure - Min - If there is just 1 lump, it is fully sorted. 
-Structure - Min/Max - If the 2 extremes of the structure are sorted, then what about in between? 
+Structure - Min/Max - If the 2 extremes of the structure are sorted, then what about in between? Is it better to have all-husk? What if it were the middle of min and max, that is there are sqrt(n) lumps, each sqrt(n) long?
+
+Implementation and use:
+This program is written in c++ and uses command line interaction. The user is asked repeatedly to either insert, search, or remove a value, print or quit. 
