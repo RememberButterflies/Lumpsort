@@ -23,3 +23,12 @@ Structure - Min/Max - If the 2 extremes of the structure are sorted, then what a
 
 Implementation and use:
 This program is written in c++ and uses command line interaction. The user is asked repeatedly to either insert, search, or remove a value, print or quit. 
+
+Plan - The planned order of features to implement:
+    Skeleton of program, including ui, print and quit.
+    Insert
+    Search
+    Remove
+Potentially later:
+    All-husk mode
+    Restructure existing hump.
