@@ -217,6 +217,50 @@ node* find_prev(lump* L, node* N, lump*& LN){
 }
 
 
+
+// new version of search with more return values that better assists with removing nodes
+int node_search(lump* L, int val, node*& Nprev, node*& N, node*& Nnext, lump*& LNprev, lump*& LN, lump*& LNnext){
+
+    // check L exists and is not empty
+    if (L == NULL){
+        return -1;
+    }
+    if (L->smallest == NULL){
+        return -1;
+    }
+
+
+    // walk through current lump (L), looking for val
+    // update N's and L's as you go
+    Nprev = NULL;
+    N = L->smallest;
+    Nnext = N->next;
+    LN = L;
+    LNnext = LN->next;
+    while (N != NULL){
+        if (N->val == val){
+            // found
+            // all values should be correctly updated
+            return val;
+        } else {
+            // not found, check next node
+            Nprev = N;
+            N = Nnext;
+            if (Nnext != NULL){
+                Nnext = Nnext->next;
+            }
+        }
+    }
+    // check next lump
+    LNprev = LN;
+    LN = LNnext;
+    if (LNnext != NULL){
+        LNnext = LNnext->next;
+    }
+    return node_search(LN, val, Nprev, N, Nnext, LNprev, LN, LNnext);
+}
+
+
 // prints the values in a hump
 // pass the root lump of the hump
 void lump_print(lump* L){

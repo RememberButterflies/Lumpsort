@@ -86,6 +86,23 @@ int main (){
                                 if (lump_remove(newval, L) == -1){
                                         std::cout << "Error removing " << newval << std::endl;
                                     }
+
+                                    /*
+                                    removal structual problems
+                                    need to check if removing node made lump invalid
+                                    if smallest was removed,
+                                        find new smallest node in hump
+                                            if that is the smallest in current lump, then nothing happense
+                                            else, move that node to current lumps smallest, and recursively redo this check to each remaining lump
+                                            at end, fix if empty or single item
+                                    if largest was removed,
+                                        find new largest and do the same thing but right hand side
+                                    if node was only node in lump and lump is not the final lump, previous lumps need to be linked
+
+                                    might need to fix the search and find prev functions to be 1 function that returns Nprev, N, Nnext, LNprev, LN and LNnext
+                                    i think all the elements i need would come from that
+                                    its written but not tested, node_search
+                                    */
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
                             }

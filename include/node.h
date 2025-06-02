@@ -10,6 +10,7 @@
 struct node {
     int val;
     node* next = NULL;
+    node* prev = NULL;
 };
 
 
