@@ -120,7 +120,62 @@ node* lump_find(int val, lump* L){
 // remove a value from a hump if it exists
 // -1 on error, 0 otherwise
 int lump_remove(int val, lump* L){
-    return 0;
+
+    // check if L exists
+    if (L == NULL){
+        return -1;
+    }
+
+std::cout << "000 test" << std::endl;
+
+    // find val's node (N), previous node (Nprev) and its lump (LN)
+    node* N = lump_find(val, L);
+    lump* LN = NULL;
+    node* Nprev = find_prev(L, N, LN);
+
+
+std::cout << "001 test" << std::endl;
+
+
+
+    // either N does not exist, it is the only node a lump, it is smallest, largest or in the middle
+    // if N does not exist
+    if (N == NULL){
+        return -1;
+    }
+
+    // if N is only element of lump
+    if ((LN->smallest == N) && (LN->largest == N)){
+        // delete both
+        delete N;
+        delete LN;
+        return val;
+    }
+
+    // if N is smallest, but not only
+    if ((LN->smallest == N) && (LN->largest != N)){
+        LN->smallest = N->next;
+        delete N;
+        return val;
+    }
+
+    // if N is largest but not only
+    if ((LN->smallest != N) && (LN->largest == N)){
+        LN->largest = Nprev;
+        Nprev->next = NULL;
+        delete N;
+        return val;
+    }
+
+    // if N is in the middle
+    if ((LN->smallest != N) && (LN->largest != N)){
+        Nprev->next = N->next;
+        delete N;
+        return val;
+    }
+
+    // unknown error
+    return -1;
 }
 
 

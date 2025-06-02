@@ -19,6 +19,8 @@ int main (){
     int inputCode = (int)UI::error;
     int newval = std::numeric_limits<int>::max();
     node* N = NULL;
+    node* Nprev = NULL;
+    lump* LN = NULL;
 
 
 
@@ -74,6 +76,20 @@ int main (){
                             }
                             break;
             case (int)UI::remove:
+
+                            // get user input for removal
+                            newval = std::numeric_limits<int>::max();
+                            std::cout << "integer value: ";
+                            std::cin >> userInput;
+                            newval = getUserInt(userInput);
+                            if (newval != std::numeric_limits<int>::max()){
+                                if (lump_remove(newval, L) == -1){
+                                        std::cout << "Error removing " << newval << std::endl;
+                                    }
+                            } else {
+                                std::cout << "Not a valid integer" << std::endl;
+                            }
+                            break;
             case (int)UI::print:
                             std::cout << "Lumphump values are: " << std::endl;
                             lump_print(L);
