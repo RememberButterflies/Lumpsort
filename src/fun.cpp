@@ -103,6 +103,31 @@ int lump_remove(int val, lump* L){
 // prints the values in a hump
 // pass the root lump of the hump
 void lump_print(lump* L){
+
+    // check if lump exists
+    // don't print error, it might be the end of hump
+    if (L == NULL){
+        return;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        return;
+    }
+
+    // print all values in order
+    // check if at end of lump before printing comma
+    node* N = L->smallest;
+    while (N != NULL){
+        std::cout << N->val;
+        N = N->next;
+        if (N != NULL){
+            std::cout << ", ";
+        }
+    }
+    // end of lump, print new line and print next lumps
+    std::cout << std::endl;
+    lump_print(L->next);
     return;
 }
 

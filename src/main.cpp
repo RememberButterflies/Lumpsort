@@ -55,6 +55,8 @@ int main (){
             case (int)UI::search:
             case (int)UI::remove:
             case (int)UI::print:
+                            std::cout << "Lumphump values are: " << std::endl;
+                            lump_print(L);
             case (int)UI::printfile:
             case (int)UI::quit:
                         break;
