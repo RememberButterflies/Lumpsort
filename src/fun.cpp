@@ -107,7 +107,7 @@ void lump_print_to_file(lump* L, std::string filename){
 }
 
 
-
+// display options to user
 void print_user_prompts(){
     std::cout << "Please select an option: " << std::endl;
     std::cout << "    h:    Display this menu again." << std::endl;
@@ -117,4 +117,27 @@ void print_user_prompts(){
     std::cout << "    p:    Print the contents of the lumphump." << std::endl;
     std::cout << "    f:    Print the contents of the lumphump to a file." << std::endl;
     std::cout << "    q:    Quit this program, lumphump will be lost." << std::endl;
+}
+
+
+
+// free memory from a hump
+void lump_free(lump* L){
+    // check if L exists
+    if (L == NULL){
+        return;
+    }
+
+    // L exists, free its Nodes
+    node* curr = L->smallest;
+    while (curr != NULL){
+        node* temp = curr->next;
+        delete curr;
+        curr = temp;
+    }
+
+    // free remaining lumps
+    lump_free(L->next);
+    return;
+
 }

@@ -45,7 +45,11 @@ void lump_print(lump* L);
 void lump_print_to_file(lump* L, std::string filename);
 
 
+// display options to user
 void print_user_prompts();
 
+
+// free memory from a hump
+void lump_free(lump* L);
 
 #endif
