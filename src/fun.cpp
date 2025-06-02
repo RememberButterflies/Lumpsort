@@ -124,6 +124,48 @@ int lump_remove(int val, lump* L){
 }
 
 
+// find the node previous to N in lumphump
+node* find_prev(lump* L, node* N, lump* LN){
+
+    // check L, N is not NULL
+    if ((L == NULL) || (N == NULL)){
+        LN = NULL;
+        return NULL;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        LN = NULL;
+        return NULL;
+    }
+
+    // first check if N is smallest in L
+    if (L->smallest == N){
+        // set LN to current L, and return NULL to say that it is first
+        LN = L;
+        return NULL;
+    }
+    
+    // walk through lump looking for N
+    node* tempA = L->smallest;
+    node* tempB = tempA->next;
+    while (tempB != NULL){
+        // if tempB is N, then tempA is prev. update LN and return tempA
+        if (tempB == N){
+            LN = L;
+            return tempA;
+        }
+        tempA = tempB;
+        tempB = tempB->next;
+    }
+
+    // check next lumps
+    return find_prev(L->next, N, LN);
+
+    return NULL;
+}
+
+
 // prints the values in a hump
 // pass the root lump of the hump
 void lump_print(lump* L){
