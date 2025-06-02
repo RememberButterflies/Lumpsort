@@ -132,43 +132,44 @@ void print_user_prompts(){
 int getInputCode(std::string userInput){
 
     // if nothing entered, return error
-    if (strlen(userInput) <= 0){
-        return UI::error;
+    int len = (int)userInput.size();
+    if (len <= 0){
+        return (int)UI::error;
     }
 
     // switch based on first char of input
-    int result = UI::error;
+    int result = (int)UI::error;
     switch (userInput[0]){
-        case h:
-        case H:
-                result = UI::help;
+        case 'h':
+        case 'H':
+                result = (int)UI::help;
                 break;
-        case i:
-        case I:
-                result = UI::insert;
+        case 'i':
+        case 'I':
+                result = (int)UI::insert;
                 break;
-        case s:
-        case S:
-                result = UI::search;
+        case 's':
+        case 'S':
+                result = (int)UI::search;
                 break;
-        case r:
-        case R:
-                result = UI::remove;
+        case 'r':
+        case 'R':
+                result = (int)UI::remove;
                 break;
-        case p:
-        case P:
-                result = UI::print;
+        case 'p':
+        case 'P':
+                result = (int)UI::print;
                 break;
-        case f:
-        case F:
-                result = UI::printfile;
+        case 'f':
+        case 'F':
+                result = (int)UI::printfile;
                 break;
-        case q:
-        case Q:
-                result = UI::quit;
+        case 'q':
+        case 'Q':
+                result = (int)UI::quit;
                 break;
         default:
-                result = UI::error;
+                result = (int)UI::error;
                 break;
     }
 

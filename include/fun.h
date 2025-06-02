@@ -1,6 +1,7 @@
 #include "lump.h"
 #include "node.h"
 #include <string>
+#include <iostream>
 
 
 #ifndef FUN_H
