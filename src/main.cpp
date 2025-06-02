@@ -102,6 +102,7 @@ int main (){
                                     might need to fix the search and find prev functions to be 1 function that returns Nprev, N, Nnext, LNprev, LN and LNnext
                                     i think all the elements i need would come from that
                                     its written but not tested, node_search
+                                    also, removal needs to account for removing the last node in hump. dont want to delete L before quit
                                     */
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
