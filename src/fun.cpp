@@ -52,6 +52,7 @@ int lump_insert(int val, lump* L){
     // N is new smallest
     if (val <= L->smallest->val){
         N->next = L->smallest;
+        L->smallest->prev = N;
         L->smallest = N;
         return val;
     }
@@ -60,6 +61,7 @@ int lump_insert(int val, lump* L){
     // N is new largest
     if (val >= L->largest->val){
         L->largest->next = N;
+        N->prev = L->largest;
         L->largest = N;
         return val;
     }
@@ -75,6 +77,7 @@ int lump_insert(int val, lump* L){
             return -1;
         }
         L->next = nextL;
+        nextL->prev = L;
     }
     return lump_insert(val, L->next);
 

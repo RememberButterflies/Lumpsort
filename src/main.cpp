@@ -13,6 +13,7 @@ int main (){
     if (L == NULL){
         return -1;
     }
+    int Lsize = 0;
 
     // variables for user input
     std::string userInput = "DEFAULT";
@@ -52,6 +53,8 @@ int main (){
                             if (newval != std::numeric_limits<int>::max()){
                                 if (lump_insert(newval, L) == -1){
                                     inputCode = (int)UI::quit;
+                                } else {
+                                    Lsize++;
                                 }
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
@@ -103,6 +106,9 @@ int main (){
                                     i think all the elements i need would come from that
                                     its written but not tested, node_search
                                     also, removal needs to account for removing the last node in hump. dont want to delete L before quit
+                                    after each remove, Lsize--, then if Lsize == 0, we know the last lump was deleted. just make L = new lump
+                                    also though, L can be removed if its only 2 nodes and 1 is removed., the other will be removed and reinserted
+                                    need to track if that happens, maybe in the removal function, keep a pass by reference for the global lump pointer. just update it as needed
                                     */
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
