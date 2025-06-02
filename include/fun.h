@@ -48,6 +48,11 @@ void lump_print_to_file(lump* L, std::string filename);
 // display options to user
 void print_user_prompts();
 
+// convert user input into a input code
+int getInputCode(std::string userInput);
+
+// get integer from user input
+int getUserInt(std::string userInput);
 
 // free memory from a hump
 void lump_free(lump* L);

@@ -1,5 +1,6 @@
 #include "../include/fun.h"
-
+#include <string>
+#include <limits>
 
 
 
@@ -15,6 +16,9 @@ int lump_insert(int val, lump* L){
 
     // make new node for val
     node* N = new node;
+    if (N == NULL){
+        return -1;
+    }
     N->val = val;
 
     // check if L is empty
@@ -67,6 +71,9 @@ int lump_insert(int val, lump* L){
     delete N;
     if (L->next == NULL){
         lump* nextL = new lump;
+        if (nextL == NULL){
+            return -1;
+        }
         L->next = nextL;
     }
     return lump_insert(val, L->next);
@@ -119,6 +126,93 @@ void print_user_prompts(){
     std::cout << "    q:    Quit this program, lumphump will be lost." << std::endl;
 }
 
+
+
+// convert user input into a input code
+int getInputCode(std::string userInput){
+
+    // if nothing entered, return error
+    if (strlen(userInput) <= 0){
+        return UI::error;
+    }
+
+    // switch based on first char of input
+    int result = UI::error;
+    switch (userInput[0]){
+        case h:
+        case H:
+                result = UI::help;
+                break;
+        case i:
+        case I:
+                result = UI::insert;
+                break;
+        case s:
+        case S:
+                result = UI::search;
+                break;
+        case r:
+        case R:
+                result = UI::remove;
+                break;
+        case p:
+        case P:
+                result = UI::print;
+                break;
+        case f:
+        case F:
+                result = UI::printfile;
+                break;
+        case q:
+        case Q:
+                result = UI::quit;
+                break;
+        default:
+                result = UI::error;
+                break;
+    }
+
+    // return result
+    return result;
+}
+
+
+
+// get integer from user input
+int getUserInt(std::string userInput){
+
+    // check userInput is not empty
+    int len = (int)userInput.size();
+    if (len <= 0){
+        return std::numeric_limits<int>::max();
+    }
+
+    // ones for current value, tens for its decimal power
+    // curr is a char for converting input to integer value
+    int ones = 0;
+    int tens = 1;
+    char curr = '!';
+    int result = 0;
+    for (int i = len-1; i >= 0; i--){
+        curr = userInput[i];
+        // check curr is a number
+        if ((curr < '0') || (curr > '9')){
+            return std::numeric_limits<int>::max();
+        }
+
+        // char to int.
+        // then int times current power of 10
+        // add to result
+        // increase 10's power
+        ones = curr - '0';
+        ones *= tens;
+        result += ones;
+        tens *= 10;
+    }
+
+    // return result
+    return result;
+}
 
 
 // free memory from a hump
