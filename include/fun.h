@@ -37,7 +37,7 @@ int lump_remove(int val, lump* L);
 
 
 // find the node previous to N in lumphump, and lump that N is contained within
-node* find_prev(lump* L, node* N, lump* LN);
+node* find_prev(lump* L, node* N, lump*& LN);
 
 
 // prints the values in a hump

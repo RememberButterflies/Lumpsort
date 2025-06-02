@@ -178,7 +178,7 @@ int lump_remove(int val, lump* L){
 
 
 // find the node previous to N in lumphump
-node* find_prev(lump* L, node* N, lump* LN){
+node* find_prev(lump* L, node* N, lump*& LN){
 
     // check L, N is not NULL
     if ((L == NULL) || (N == NULL)){
@@ -214,8 +214,6 @@ node* find_prev(lump* L, node* N, lump* LN){
 
     // check next lumps
     return find_prev(L->next, N, LN);
-
-    return NULL;
 }
 
 
