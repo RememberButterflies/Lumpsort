@@ -18,6 +18,7 @@ int main (){
     std::string userInput = "DEFAULT";
     int inputCode = (int)UI::error;
     int newval = std::numeric_limits<int>::max();
+    node* N = NULL;
 
 
 
@@ -50,9 +51,28 @@ int main (){
                                 if (lump_insert(newval, L) == -1){
                                     inputCode = (int)UI::quit;
                                 }
+                            } else {
+                                std::cout << "Not a valid integer" << std::endl;
                             }
                             break;
             case (int)UI::search:
+
+                            // get user input for search
+                            newval = std::numeric_limits<int>::max();
+                            std::cout << "integer value: ";
+                            std::cin >> userInput;
+                            newval = getUserInt(userInput);
+                            if (newval != std::numeric_limits<int>::max()){
+                                N = lump_find(newval, L);
+                                if (N == NULL){
+                                    std::cout << newval << " not found" << std::endl;
+                                } else {
+                                    std::cout << newval << " found" << std::endl;
+                                }
+                            } else {
+                                std::cout << "Not a valid integer" << std::endl;
+                            }
+                            break;
             case (int)UI::remove:
             case (int)UI::print:
                             std::cout << "Lumphump values are: " << std::endl;

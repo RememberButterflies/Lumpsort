@@ -89,7 +89,31 @@ int lump_insert(int val, lump* L){
 // pass the root lump of the hump
 // null on error, the node itself if found
 node* lump_find(int val, lump* L){
-    return NULL;
+
+    // check that L exists
+    if (L == NULL){
+        return NULL;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        return NULL;
+    }
+
+    // search this lump
+    node* N = L->smallest;
+    while (N != NULL){
+        if (N->val == val){
+            // found
+            return N;
+        } else {
+            N = N->next;
+        }
+    }
+
+    // val not found in this lump, search next
+    // return value with tail recursion
+    return lump_find(val, L->next);
 }
 
 
