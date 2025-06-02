@@ -126,7 +126,6 @@ int lump_remove(int val, lump* L){
         return -1;
     }
 
-std::cout << "000 test" << std::endl;
 
     // find val's node (N), previous node (Nprev) and its lump (LN)
     node* N = lump_find(val, L);
@@ -134,7 +133,6 @@ std::cout << "000 test" << std::endl;
     node* Nprev = find_prev(L, N, LN);
 
 
-std::cout << "001 test" << std::endl;
 
 
 
