@@ -11,7 +11,7 @@
 
 
 
-// if only 1 node, then largest will remain NULL
+
 struct lump {
     node* smallest = NULL;
     node* largest = NULL;
