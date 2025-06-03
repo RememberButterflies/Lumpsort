@@ -69,7 +69,7 @@ int lump_insert(int val, lump* L){
     // else, val is in the middle, 
     // delete val's node
     // check if L->next exists, if not create it and link it
-    // insert it into next lump, recursively
+    // insert val into next lump, recursively
     delete N;
     if (L->next == NULL){
         lump* nextL = new lump;
@@ -86,7 +86,8 @@ int lump_insert(int val, lump* L){
 }
 
 
-
+/*
+    redoing remove. will uncomment when done
 
 // find value in hump
 // pass the root lump of the hump
@@ -262,6 +263,180 @@ int node_search(lump* L, int val, node*& Nprev, node*& N, node*& Nnext, lump*& L
     }
     return node_search(LN, val, Nprev, N, Nnext, LNprev, LN, LNnext);
 }
+
+
+*/
+
+
+// find value in hump
+// pass the root lump of the hump
+// null on error, the node itself if found
+// updates LN to be the lump with val's node
+node* lump_find(int val, lump* L, lump*& LN){
+
+    // check that L exists
+    if (L == NULL){
+        LN = NULL;
+        return NULL;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        LN = NULL;
+        return NULL;
+    }
+
+    // search this lump
+    node* N = L->smallest;
+    while (N != NULL){
+        if (N->val == val){
+            // found
+            LN = L;
+            return N;
+        } else {
+            N = N->next;
+        }
+    }
+
+    // val not found in this lump, search next
+    // return value with tail recursion
+    return lump_find(val, L->next, LN);
+}
+
+
+// remove a value from a hump if it exists
+// -1 on error, 0 otherwise
+int lump_remove(int val, lump* L){
+
+    // find val's node and lump
+    lump* LN = NULL;
+    node* N = lump_find(val, L, LN);
+
+    // check if node found
+    if (N == NULL){
+        return -1;
+    }
+
+
+    // relink neighbour nodes
+    if (N->prev != NULL){
+        // not the smallest
+        N->prev->next = N->next;
+    } else {
+        // is the smallest
+        LN->smallest = N->next;
+    }
+    if (N->next != NULL){
+        // not largest
+        N->next->prev = N->prev;
+    } else {
+        // is largest
+        LN->largest = N->prev;
+    }
+    // remove N
+    delete N;
+
+    // check if LN is 1 or 0 nodes
+    if (LN->smallest == LN->largest){
+        if (LN->smallest == NULL){
+            // LN is empty
+            // there should not be any remaining lumps, delete LN
+            if (LN->prev != NULL){
+                LN->prev->next = LN->next;
+            }
+            if (LN->next != NULL){
+                LN->next->prev = LN->prev;
+            }
+            delete LN;
+            return val;
+        }
+    }
+
+    // borrow edge nodes from next lump(s), if needed
+    if (borrow_nodes(LN) != -1){
+        return val;
+    }
+
+    // unknown error
+    return -1;
+}
+
+
+// "borrows" nodes from neighbour lumps if needed
+// helper funciton for lump_remove
+// if an edge node was removed, it may have in validated that lump.
+// this function will check if thats true and then move the next lump's edge node down
+// then recursively do the same until its not needed or its at the end, then stops
+int borrow_nodes(lump* LN){
+    // check if LN has a next lump
+    if (LN->next == NULL){
+        // nothing to borrow
+        return 0;
+    }
+
+
+    // variables for borrow from the smallest side
+    // this nodes current smallest
+    // the next node's smallest
+    node* LNsmallest = LN->smallest;
+    node* LNnsmallest = LN->next->smallest;
+    // check LN's smallest is larger than next lump's smallest
+    // sequential nodes can have the same value smallest's (or largests)
+    if (LNsmallest->val > LNnsmallest->val){
+        // move LN's next's smallest node to be LN's new smallest
+        LN->next->smallest = LNnsmallest->next;
+        if (LN->next->smallest != NULL){
+            LN->next->smallest->prev = NULL;
+        }
+        LNnsmallest->next = LNsmallest;
+        LNsmallest->prev = LNnsmallest;
+        LN->smallest = LNnsmallest;
+
+        // check if LN->next is now empty
+        // delete it and return
+        if (LN->next->smallest == NULL){
+            delete LN->next;
+            return 0;
+        }
+
+        // borrow from the next nodes
+        return borrow_nodes(LN->next);
+    }
+
+    // variables for borrow from the largest side
+    // this nodes current largest
+    // the next node's largest
+    node* LNlargest = LN->largest;
+    node* LNnlargest = LN->next->largest;
+    // check LN's largest is smaller than next lump's largest
+    // sequential nodes can have the same value largest's (or smallest)
+    if (LNlargest->val < LNnlargest->val){
+        // move LN's next's largest node to be LN's new largest
+        LN->next->largest = LNnlargest->prev;
+        if (LN->next->largest != NULL){
+            LN->next->largest->next = NULL;
+        }
+        LNnlargest->prev = LNlargest;
+        LNlargest->next = LNnlargest;
+        LN->largest = LNnlargest;
+
+        // check if LN->next is now empty
+        // delete it and return
+        if (LN->next->largest == NULL){
+            delete LN->next;
+            return 0;
+        }
+
+        // borrow from the next nodes
+        return borrow_nodes(LN->next);
+    }
+
+    /// nothing to borrow
+    return 0;
+
+}
+
+
 
 
 // prints the values in a hump

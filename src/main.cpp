@@ -68,7 +68,8 @@ int main (){
                             std::cin >> userInput;
                             newval = getUserInt(userInput);
                             if (newval != std::numeric_limits<int>::max()){
-                                N = lump_find(newval, L);
+                                lump* LN = NULL;
+                                N = lump_find(newval, L, LN);
                                 if (N == NULL){
                                     std::cout << newval << " not found" << std::endl;
                                 } else {
@@ -89,27 +90,6 @@ int main (){
                                 if (lump_remove(newval, L) == -1){
                                         std::cout << "Error removing " << newval << std::endl;
                                     }
-
-                                    /*
-                                    removal structual problems
-                                    need to check if removing node made lump invalid
-                                    if smallest was removed,
-                                        find new smallest node in hump
-                                            if that is the smallest in current lump, then nothing happense
-                                            else, move that node to current lumps smallest, and recursively redo this check to each remaining lump
-                                            at end, fix if empty or single item
-                                    if largest was removed,
-                                        find new largest and do the same thing but right hand side
-                                    if node was only node in lump and lump is not the final lump, previous lumps need to be linked
-
-                                    might need to fix the search and find prev functions to be 1 function that returns Nprev, N, Nnext, LNprev, LN and LNnext
-                                    i think all the elements i need would come from that
-                                    its written but not tested, node_search
-                                    also, removal needs to account for removing the last node in hump. dont want to delete L before quit
-                                    after each remove, Lsize--, then if Lsize == 0, we know the last lump was deleted. just make L = new lump
-                                    also though, L can be removed if its only 2 nodes and 1 is removed., the other will be removed and reinserted
-                                    need to track if that happens, maybe in the removal function, keep a pass by reference for the global lump pointer. just update it as needed
-                                    */
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
                             }

@@ -25,6 +25,12 @@ enum class UI {
 // -1 on error, 0 otherwise
 int lump_insert(int val, lump* L);
 
+
+/*
+
+    redoing remove. will uncomment when done
+
+
 // find value in hump
 // pass the root lump of the hump
 // null on error, the node itself if found
@@ -41,6 +47,32 @@ node* find_prev(lump* L, node* N, lump*& LN);
 
 // new version of search with more return values that better assists with removing nodes
 int node_search(lump* L, int val, node*& Nprev, node*& N, node*& Nnext, lump*& LNprev, lump*& LN, lump*& LNnext);
+
+
+
+*/
+
+
+
+// find value in hump
+// pass the root lump of the hump
+// null on error, the node itself if found
+// updates LN to be the lump with val's node
+node* lump_find(int val, lump* L, lump*& LN);
+
+// remove a value from a hump if it exists
+// -1 on error, 0 otherwise
+int lump_remove(int val, lump* L);
+
+// "borrows" nodes from neighbour lumps if needed
+// helper funciton for lump_remove
+// if an edge node was removed, it may have in validated that lump.
+// this function will check if thats true and then move the next lump's edge node down
+// then recursively do the same until its not needed or its at the end, then stops
+int borrow_nodes(lump* LN);
+
+
+
 
 
 // prints the values in a hump
