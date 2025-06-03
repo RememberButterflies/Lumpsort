@@ -6,12 +6,13 @@ CXX = g++
 # Define the name of the final executable.
 TARGET = lumpsort
 
-# Define the source and object files, and link objects
+# Define the source and object files, and link objects and output
 SRC_FUN = src/fun.cpp
 SRC_MAIN = src/main.cpp
 OBJ_FUN = objects/fun.o
 OBJ_MAIN = objects/main.o
 ALL_OBJS = $(OBJ_FUN) $(OBJ_MAIN)
+OUTPUT_FLDR = output
 
 # Phony targets
 .PHONY: all clean
@@ -37,4 +38,4 @@ $(OBJ_MAIN): $(SRC_MAIN) include/fun.h
 # Clean target: remove compiled files and the objects directory
 # This rule removes all object files, the final executable, and the 'objects' directory.
 clean:
-	rm -f $(ALL_OBJS) $(TARGET)
+	rm -f $(ALL_OBJS) $(TARGET) $(OUTPUT_FLDR)/*

@@ -101,6 +101,17 @@ int main (){
                             std::cout << "Lumphump values are: " << std::endl;
                             lump_print(L);
             case (int)UI::printfile:
+                            std::cout << "Please enter a file name (with extension): ";
+                            std::cin >> userInput;
+                            int result = lump_print_to_file(L, userInput);
+                            if (result == -1){
+                                std::cout << "Not a valid filename" << std::endl;
+                            } else if (result == -2){
+                                std::cout << "Error: file already exists" << std::endl;
+                            } else if (result == -3){
+                                std::cout << "Error writing to file" << std::endl;
+                            }
+                            break;
             case (int)UI::quit:
                         break;
             case (int)UI::error:

@@ -55,7 +55,7 @@ void lump_print(lump* L);
 
 // print the values in a hump to a file, in a format that this program can read as input
 // pass the root lump of the hump
-void lump_print_to_file(lump* L, std::string filename);
+int lump_print_to_file(lump* L, std::string filename);
 
 
 // display options to user

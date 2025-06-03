@@ -1,6 +1,7 @@
 #include "../include/fun.h"
 #include <string>
 #include <limits>
+#include <fstream>
 
 
 
@@ -84,6 +85,7 @@ int lump_insert(int val, lump* L){
     // unknown error
     return -1;
 }
+
 
 
 
@@ -324,8 +326,69 @@ void lump_print(lump* L){
 
 // print the values in a hump to a file, in a format that this program can read as input
 // pass the root lump of the hump
-void lump_print_to_file(lump* L, std::string filename){
-    return;
+int lump_print_to_file(lump* L, std::string filename){
+
+    // check if valid filename
+    int len = (int)filename.size();
+    if (len <= 0){
+        return -1;
+    }
+    for (int i=0; i<len; i++){
+        int valid = -1;
+        // check '-', '_', '.' and ' '
+        // then 0-9, A-Z and a-z
+        if (filename[i] == ' '){
+            valid = 0;
+        } else if (filename[i] == '-'){
+            valid = 0;
+        } else if (filename[i] == '_'){
+            valid = 0;
+        } else if (filename[i] == '.'){
+            valid = 0;
+        } else if ((filename[i] >= '0') && (filename[i] <= '9')){
+            valid = 0;
+        } else if ((filename[i] >= 'A') && (filename[i] <= 'Z')){
+            valid = 0;
+        } else if ((filename[i] >= 'a') && (filename[i] <= 'z')){
+            valid = 0;
+        }
+
+        // check if that char was valid
+        if (valid == -1){
+            return -1;
+        }
+    }
+
+    // check if file already exists
+    std::ifstream file(filename.c_str(), std::ios::ate);
+    // Check if the file stream was successfully opened
+    if (file.good()){
+        file.close();
+        return -2;
+    }
+    file.close();
+
+
+    // check if lump exists
+    if (L == NULL){
+        return -3;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        return -3;
+    }
+
+    // open file in write only mode and iterate through lumphump
+    // insert "i" + newline before each number so this program can read it later
+    // save current std cout buffer
+    // open new file in write only and redirect std cout to file buffer
+    // run regular print lump function
+    // close file and restore std cout buffer
+    // close
+
+
+    return -1;
 }
 
 
