@@ -35,6 +35,7 @@ int main (){
         std::cin >> userInput;
         inputCode = getInputCode(userInput);
         userInput = "DEFAULT";
+        int result = -1;
 
         // handle input
         switch (inputCode) {
@@ -87,7 +88,7 @@ int main (){
                             std::cin >> userInput;
                             newval = getUserInt(userInput);
                             if (newval != std::numeric_limits<int>::max()){
-                                int result = lump_remove(newval, L);
+                                result = lump_remove(newval, L);
                                 if (result == -1){
                                     std::cout << "Error removing " << newval << std::endl;
                                 } else if (result == -2){
@@ -100,10 +101,11 @@ int main (){
             case (int)UI::print:
                             std::cout << "Lumphump values are: " << std::endl;
                             lump_print(L);
+                            break;
             case (int)UI::printfile:
                             std::cout << "Please enter a file name (with extension): ";
                             std::cin >> userInput;
-                            int result = lump_print_to_file(L, userInput);
+                            result = lump_print_to_file(L, userInput);
                             if (result == -1){
                                 std::cout << "Not a valid filename" << std::endl;
                             } else if (result == -2){
