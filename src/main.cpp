@@ -103,7 +103,7 @@ int main (){
                             lump_print(L);
                             break;
             case (int)UI::printfile:
-                            std::cout << "Please enter a file name (with extension): ";
+                            std::cout << "Please enter a file name (without extension): ";
                             std::cin >> userInput;
                             result = lump_print_to_file(L, userInput);
                             if (result == -1){

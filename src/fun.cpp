@@ -3,6 +3,9 @@
 #include <limits>
 #include <fstream>
 
+std::string location = "/output/";
+std::string extension = ".txt";
+
 
 
 // insert a value into a hump,
@@ -359,8 +362,10 @@ int lump_print_to_file(lump* L, std::string filename){
         }
     }
 
+    std::string realFN = location + filename + extension;
+
     // check if file already exists
-    std::ifstream file(filename.c_str(), std::ios::ate);
+    std::ifstream file(realFN.c_str(), std::ios::ate);
     // Check if the file stream was successfully opened
     if (file.good()){
         file.close();
