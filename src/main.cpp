@@ -87,9 +87,12 @@ int main (){
                             std::cin >> userInput;
                             newval = getUserInt(userInput);
                             if (newval != std::numeric_limits<int>::max()){
-                                if (lump_remove(newval, L) == -1){
-                                        std::cout << "Error removing " << newval << std::endl;
-                                    }
+                                int result = lump_remove(newval, L);
+                                if (result == -1){
+                                    std::cout << "Error removing " << newval << std::endl;
+                                } else if (result == -2){
+                                    std::cout << newval << ", not found in lumphump" << std::endl;
+                                }
                             } else {
                                 std::cout << "Not a valid integer" << std::endl;
                             }

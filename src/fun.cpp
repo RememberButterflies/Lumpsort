@@ -314,7 +314,7 @@ int lump_remove(int val, lump* L){
 
     // check if node found
     if (N == NULL){
-        return -1;
+        return -2;
     }
 
 
@@ -368,6 +368,11 @@ int lump_remove(int val, lump* L){
 // this function will check if thats true and then move the next lump's edge node down
 // then recursively do the same until its not needed or its at the end, then stops
 int borrow_nodes(lump* LN){
+
+    // check if LN exists
+    if (LN == NULL){
+        return 0;
+    }
     // check if LN has a next lump
     if (LN->next == NULL){
         // nothing to borrow
@@ -375,18 +380,30 @@ int borrow_nodes(lump* LN){
     }
 
 
-    // variables for borrow from the smallest side
+    // variables for borrowing
+    lump* LNn = LN->next;
     // this nodes current smallest
     // the next node's smallest
     node* LNsmallest = LN->smallest;
-    node* LNnsmallest = LN->next->smallest;
+    node* LNnsmallest = LNn->smallest;
+    // this nodes current largest
+    // the next node's largest
+    node* LNlargest = LN->largest;
+    node* LNnlargest = LNn->largest;
     // check LN's smallest is larger than next lump's smallest
     // sequential nodes can have the same value smallest's (or largests)
+    // first check if there is a smallest node
+    if (LNsmallest == NULL){
+        return 0;
+    }
     if (LNsmallest->val > LNnsmallest->val){
         // move LN's next's smallest node to be LN's new smallest
-        LN->next->smallest = LNnsmallest->next;
-        if (LN->next->smallest != NULL){
-            LN->next->smallest->prev = NULL;
+        LNn->smallest = LNnsmallest->next;
+        if (LNn->smallest != NULL){
+            LNn->smallest->prev = NULL;
+        } else {
+            // if moving LNn's smallest made it NULL, its largest is also NULL
+            LNn->largest = NULL;
         }
         LNnsmallest->next = LNsmallest;
         LNsmallest->prev = LNnsmallest;
@@ -394,27 +411,35 @@ int borrow_nodes(lump* LN){
 
         // check if LN->next is now empty
         // delete it and return
-        if (LN->next->smallest == NULL){
-            delete LN->next;
+        if (LNn->smallest == NULL){
+            if (LNn->prev != NULL){
+                LNn->prev->next = LNn->next;
+            }
+            if (LNn->next != NULL){
+                LNn->next->prev = LNn->prev;
+            }
+            delete LNn;
             return 0;
         }
 
         // borrow from the next nodes
-        return borrow_nodes(LN->next);
+        return borrow_nodes(LNn);
     }
 
-    // variables for borrow from the largest side
-    // this nodes current largest
-    // the next node's largest
-    node* LNlargest = LN->largest;
-    node* LNnlargest = LN->next->largest;
+    // largest side
+    if (LNlargest == NULL){
+        return 0;
+    }
     // check LN's largest is smaller than next lump's largest
     // sequential nodes can have the same value largest's (or smallest)
     if (LNlargest->val < LNnlargest->val){
         // move LN's next's largest node to be LN's new largest
-        LN->next->largest = LNnlargest->prev;
-        if (LN->next->largest != NULL){
-            LN->next->largest->next = NULL;
+        LNn->largest = LNnlargest->prev;
+        if (LNn->largest != NULL){
+            LNn->largest->next = NULL;
+        }else {
+            // if moving LNn's largest made it NULL, its smallest is also NULL
+            LNn->smallest = NULL;
         }
         LNnlargest->prev = LNlargest;
         LNlargest->next = LNnlargest;
@@ -422,13 +447,19 @@ int borrow_nodes(lump* LN){
 
         // check if LN->next is now empty
         // delete it and return
-        if (LN->next->largest == NULL){
-            delete LN->next;
+        if (LNn->largest == NULL){
+            if (LNn->prev != NULL){
+                LNn->prev->next = LNn->next;
+            }
+            if (LNn->next != NULL){
+                LNn->next->prev = LNn->prev;
+            }
+            delete LNn;
             return 0;
         }
 
         // borrow from the next nodes
-        return borrow_nodes(LN->next);
+        return borrow_nodes(LNn);
     }
 
     /// nothing to borrow
