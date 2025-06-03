@@ -26,33 +26,6 @@ enum class UI {
 int lump_insert(int val, lump* L);
 
 
-/*
-
-    redoing remove. will uncomment when done
-
-
-// find value in hump
-// pass the root lump of the hump
-// null on error, the node itself if found
-node* lump_find(int val, lump* L);
-
-
-// remove a value from a hump if it exists
-// -1 on error, 0 otherwise
-int lump_remove(int val, lump* L);
-
-
-// find the node previous to N in lumphump, and lump that N is contained within
-node* find_prev(lump* L, node* N, lump*& LN);
-
-// new version of search with more return values that better assists with removing nodes
-int node_search(lump* L, int val, node*& Nprev, node*& N, node*& Nnext, lump*& LNprev, lump*& LN, lump*& LNnext);
-
-
-
-*/
-
-
 
 // find value in hump
 // pass the root lump of the hump
