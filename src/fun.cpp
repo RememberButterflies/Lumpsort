@@ -1,17 +1,36 @@
+/**
+ * @file fun.h
+ * @author Patrick McGrath, Student, VIU, Self-Project
+ * @version 1.0.0
+ * @date June 3, 2025
+ *
+ * Function Definitions for Lumphump sorting algorithm
+ * Functions declared in fun.h
+ */
+
 #include "../include/fun.h"
 #include <string>
 #include <limits>
 #include <iostream>
 #include <fstream>
 
+
+// Location and extension used by print function
 std::string location = "output/";
 std::string extension = ".lump";
 
 
 
-// insert a value into a hump,
-// pass the root lump of the hump
-// -1 on error, val otherwise
+
+/**
+ * Function for inserting a new value into a lumphump. 
+ * Will recursively call itself on next lumps until success or new one is created.
+ *
+ * @param val, integer value to be inserted
+ * @param L, lump pointer to root lump of the lumphump.
+ * 
+ * @return 0, if unsuccessful. -1, otherwise.
+ */
 int lump_insert(int val, lump* L){
 
     // check that L exists
@@ -94,10 +113,17 @@ int lump_insert(int val, lump* L){
 
 
 
-// find value in hump
-// pass the root lump of the hump
-// null on error, the node itself if found
-// updates LN to be the lump with val's node
+/**
+ * Function for finding a value in a lumphump.
+ * Will return the first node matching that value in the lumphump,
+ * as well as detering the lump it is contained in.
+ *
+ * @param val, integer value to be searched
+ * @param L, lump pointer to root lump of the lumphump.
+ * @param LN, lump pointer to the lump containing the node with val.
+ * 
+ * @return node pointer of val, if successful. NULL, otherwise.
+ */
 node* lump_find(int val, lump* L, lump*& LN){
 
     // check that L exists
@@ -130,8 +156,14 @@ node* lump_find(int val, lump* L, lump*& LN){
 }
 
 
-// remove a value from a hump if it exists
-// -1 on error, 0 otherwise
+/**
+ * Function for removing a value from a lumphump
+ *
+ * @param val, integer value to be removed (if exists)
+ * @param L, lump pointer to root lump of the lumphump.
+ * 
+ * @return -1, if unsuccessful. 0, otherwise.
+ */
 int lump_remove(int val, lump* L){
 
     // find val's node and lump
@@ -188,11 +220,16 @@ int lump_remove(int val, lump* L){
 }
 
 
-// "borrows" nodes from neighbour lumps if needed
-// helper funciton for lump_remove
-// if an edge node was removed, it may have in validated that lump.
-// this function will check if thats true and then move the next lump's edge node down
-// then recursively do the same until its not needed or its at the end, then stops
+/**
+ * Helper function for removal of nodes.
+ * Removing a node from the edge of a lump can cause its lump to be invalid. 
+ * This function checks if the lump is invalidated, and "borrows" from the next lump's edge node.
+ * This is done recursively until no lump is invalidated or the end is reached.
+ *
+ * @param LN, lump pointer to lump that is being checked whether it needs to borrow from its neighbours.
+ * 
+ * @return -1, if unsuccessful. 0, otherwise.
+ */
 int borrow_nodes(lump* LN){
 
     // check if LN exists
@@ -296,8 +333,13 @@ int borrow_nodes(lump* LN){
 
 
 
-// prints the values in a hump
-// pass the root lump of the hump
+/**
+ * Function for printing the contents of the in-memory lumphump to command-line
+ *
+ * @param L, lump pointer to root lump of the lumphump.
+ * 
+ * @return void
+ */
 void lump_print(lump* L){
 
     // check if lump exists
@@ -328,11 +370,22 @@ void lump_print(lump* L){
 }
 
 
-// print the values in a hump to a file, in a format that this program can read as input
-// pass the root lump of the hump
+/**
+ * Function for printing the contents of the in-memory lumphump to file.
+ * The output format is for re-use as input by this program.
+ * Each value has "i" before it for insert and the whole file ends in "p" and "q" for print and quit.
+ * File will be printed to "location" with "extension" appended
+ *
+ * @param L, lump pointer to root lump of the lumphump.
+ * @param filename, string of the file to print to, without extension or location.
+ * 
+ * @return -1, if not a valid filename.
+ * @return -2, if file already exists
+ * @return -3, if other error.
+ * @return 0, if no error.
+ */
 int lump_print_to_file(lump* L, std::string filename){
 
-std::cout << "000 test pritn to filename " << filename << std::endl;
 
     // check if valid filename
     int len = (int)filename.size();
@@ -366,7 +419,6 @@ std::cout << "000 test pritn to filename " << filename << std::endl;
     }
 
     std::string realFN = location + filename + extension;
-std::cout << "001 test pritn to realFn " << realFN << std::endl;
 
     // check if file already exists
     std::ifstream file(realFN.c_str(), std::ios::ate);
@@ -387,7 +439,6 @@ std::cout << "001 test pritn to realFn " << realFN << std::endl;
     if (L->smallest == NULL){
         return -3;
     }
-std::cout << "002 attempt to open " << realFN << std::endl;
 
     // open file in write only mode and iterate through lumphump
     std::ofstream outFile;
@@ -396,20 +447,13 @@ std::cout << "002 attempt to open " << realFN << std::endl;
         return -3;
     }
 
-    std::cout << "003 has opened " << realFN << std::endl;
 
     // insert "i" + newline before each number so this program can read it later
     lump* currL = L;
     node* N = currL->smallest;
     // iterate through lumps, and nested iterate through nodes
-    int i = 0;
-    int j = 0;
     while (currL != NULL){
-        std::cout << "004 lump print number " << i << std::endl;
-        i++;
         while (N != NULL){
-            std::cout << "005 node print number " << j << ", val = " << N->val << std::endl;
-            j++;
             outFile << "i " << N->val << "\n";
             N = N->next;
         }
@@ -427,7 +471,13 @@ std::cout << "002 attempt to open " << realFN << std::endl;
 }
 
 
-// display options to user
+/**
+ * Function for displaying user options to command line
+ *
+ * @param none
+ * 
+ * @return void
+ */
 void print_user_prompts(){
     std::cout << "Please select an option: " << std::endl;
     std::cout << "    h:    Display this menu again." << std::endl;
@@ -441,7 +491,13 @@ void print_user_prompts(){
 
 
 
-// convert user input into a input code
+/**
+ * Function for determing if user input is valid and if so, what it is.
+ *
+ * @param userInput, string to be checked
+ * 
+ * @return integer value from enum class UI
+ */
 int getInputCode(std::string userInput){
 
     // if nothing entered, return error
@@ -492,7 +548,13 @@ int getInputCode(std::string userInput){
 
 
 
-// get integer from user input
+/**
+ * Function for converting user input string into a positive integer, if the string is a valid integer.
+ *
+ * @param userInput, string to be checked
+ * 
+ * @return -1 if unsuccesful, otherwise the converted value
+ */
 int getUserInt(std::string userInput){
 
     // check userInput is not empty
@@ -529,7 +591,13 @@ int getUserInt(std::string userInput){
 }
 
 
-// free memory from a hump
+/**
+ * Function for freeing in-memory lumphump and all its nodes
+ *
+ * @param L, lump pointer to root lump of the lumphump.
+ * 
+ * @return void
+ */
 void lump_free(lump* L){
     // check if L exists
     if (L == NULL){

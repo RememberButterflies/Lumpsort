@@ -1,3 +1,12 @@
+/**
+ * @file main.cpp
+ * @author Patrick McGrath, Student, VIU, Self-Project
+ * @version 1.0.0
+ * @date June 3, 2025
+ *
+ * Main function for lumpsort algorithm.
+ * Handles user input and calls appropriate functions until quit is chosen.
+ */
 #include "../include/fun.h"
 #include <string>
 #include <limits>
@@ -5,7 +14,13 @@
 
 
 
-
+/**
+ * Main function. Handles all user input and interaction. 
+ *
+ * @param none
+ * 
+ * @return 0
+ */
 int main (){
 
     // pointer for root lump
