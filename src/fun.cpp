@@ -1,5 +1,5 @@
 /**
- * @file fun.h
+ * @file fun.cpp
  * @author Patrick McGrath, Student, VIU, Self-Project
  * @version 1.0.0
  * @date June 3, 2025
