@@ -45,7 +45,8 @@ Then, when inserting a new value, you would recursively check, "is the value les
     Second, If there was consistency to the size of lumps and husks, then the worst case scenario could be reduced. 
     The best "shape" for a lumphump is square, where there are no more than sqrt(N) lumps, each with no more than sqrt(N) nodes each. 
     And to be more ideal, each husk is (sqrt(N)/2) in size. 
-    If both corelessness / all-husk and squareishness were implemented, a search would be sqrt(N) lumps + sqrt(N) nodes for a complexity of O(sqrt(N)). The complexity of maintaining this structure may make it not worth it. Corelessness would happen on insert and squareishness could be a scheduled task.
+    If both corelessness / all-husk and squareishness were implemented, a search would be sqrt(N) lumps + sqrt(N) nodes for a complexity of O(sqrt(N)). 
+    The complexity of maintaining this structure may make it not worth it. Corelessness would happen on insert and squareishness could be a scheduled task.
 
 ## Use
     This program was designed and tested on Debian GNU/Linux 12 (bookworm) x86_64. It was not tested on any other system. 
