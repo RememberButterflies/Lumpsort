@@ -17,7 +17,7 @@ Then, when inserting a new value, you would recursively check, "is the value les
     Node:   The data structure being sorted. Exists in a double-linked list contained within a single lump.
     Lump:   The data structure that contains a single sorted double-linked node list. Exists in a double-linked list within a hump
     Hump:   (aka Lumphump) A double-linked list of lumps. Each lump is within the range of the previous lump.
-    Husk:   The smallest and largest portions of a lump, where each lowest value is lesser than each previous lump, and similar for the largest values. 
+    Husk:   The smallest and largest portions of a lump, where each lowest value is lesser than each next lump, and similar for the largest values. 
     Core:   The values not present in any husk in a hump. That is, the values that overlap with the ranges of subsequent lumps. 
 
 ## Observations:
