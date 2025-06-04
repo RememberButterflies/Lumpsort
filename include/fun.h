@@ -39,7 +39,7 @@ enum class UI {
  * @param val, integer value to be inserted
  * @param L, lump pointer to root lump of the lumphump.
  * 
- * @return 0, if unsuccessful. -1, otherwise.
+ * @return val, if successful. -1, otherwise.
  */
 int lump_insert(int val, lump* L);
 
@@ -77,7 +77,7 @@ int lump_remove(int val, lump* L);
  *
  * @param LN, lump pointer to lump that is being checked whether it needs to borrow from its neighbours.
  * 
- * @return -1, if unsuccessful. 0, otherwise.
+ * @return -1, if unsuccessful. 0, otherwise. (no unsuccessful conditions identified)
  */
 int borrow_nodes(lump* LN);
 
@@ -137,7 +137,7 @@ int getInputCode(std::string userInput);
  *
  * @param userInput, string to be checked
  * 
- * @return -1 if unsuccesful, otherwise the converted value
+ * @return std::numeric_limits<int>::max() if unsuccesful, otherwise the converted value
  */
 int getUserInt(std::string userInput);
 

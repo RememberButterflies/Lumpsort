@@ -31,22 +31,25 @@ int main (){
     int Lsize = 0;
 
     // variables for user input
-    std::string userInput = "DEFAULT";
-    int inputCode = (int)UI::error;
-    int newval = std::numeric_limits<int>::max();
-    node* N = NULL;
+    std::string userInput = "DEFAULT";              // string for user input
+    int inputCode = (int)UI::error;                 // code for user selection
+    int newval = std::numeric_limits<int>::max();   // integer for user input
+    node* N = NULL;                                 // temp node pointer
     node* Nprev = NULL;
-    lump* LN = NULL;
+    lump* LN = NULL;                                // temp lump pointer
 
 
 
     // continually ask for user selection until quit is chosen
     while (inputCode != (int)UI::quit){
 
-        // get input
+        // If previous selection was not help, print the prompt asking for input
         if(inputCode != (int)UI::help){
             std::cout << "Please enter your next command (or 'h' for a list of commands)" << std::endl;
         }
+
+        // get input and inputCode
+        // and reset variables
         std::cin >> userInput;
         inputCode = getInputCode(userInput);
         userInput = "DEFAULT";
@@ -84,7 +87,7 @@ int main (){
                             std::cin >> userInput;
                             newval = getUserInt(userInput);
                             if (newval != std::numeric_limits<int>::max()){
-                                lump* LN = NULL;
+                                LN = NULL;
                                 N = lump_find(newval, L, LN);
                                 if (N == NULL){
                                     std::cout << newval << " not found" << std::endl;
@@ -103,6 +106,7 @@ int main (){
                             std::cin >> userInput;
                             newval = getUserInt(userInput);
                             if (newval != std::numeric_limits<int>::max()){
+                                // attempt to remove it
                                 result = lump_remove(newval, L);
                                 if (result == -1){
                                     std::cout << "Error removing " << newval << std::endl;
@@ -129,7 +133,7 @@ int main (){
                                 std::cout << "Error writing to file" << std::endl;
                             }
                             break;
-            case (int)UI::quit:
+            case (int)UI::quit: // do nothing, the next iteration of this loop will exit itself
                         break;
             case (int)UI::error:
                         std::cout << "Invalid input. Enter a Valid command (or 'h' for a list of commands)" << std::endl;
@@ -141,5 +145,8 @@ int main (){
         }
         
     }
+
+    // Free memory and exit
+    lump_free(L);
     return 0;
 }

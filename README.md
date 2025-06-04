@@ -16,7 +16,7 @@ Then, when inserting a new value, you would recursively check, "is the value les
 ## Terminology:
     Node:   The data structure being sorted. A double-linked list contained within a single lump.
     Lump:   The data structure that contains a single sorted double-linked node list.
-    Hump:   A double-linked list of lumps. Each lump is within the range of the previous lump.
+    Hump:   (aka Lumphump) A double-linked list of lumps. Each lump is within the range of the previous lump.
     Husk:   The smallest and largest portions of a lump, where each lowest value is lesser than each previous lump, and similar for the largest values. 
     Core:   The values not present in any husk in a hump. That is, the values that overlap with the ranges of subsequent lumps. 
 
@@ -56,6 +56,8 @@ Then, when inserting a new value, you would recursively check, "is the value les
             *f:    Print the contents of the lumphump to a file
             *q:    Quit this program, lumphump will be lost
         5. Alternatively, if a previous execution produced an output file, it can be used as input by execution `./lumpsort output/filename.lump`. It will quit automatically. 
+
+    Note: output filename's must contain only 0-9, a-z, A-Z or '-', '.', '_' or ' '.
 ### Uninstall
     To uninstall this program;
         1. In command-line, navigate to the directory containing this README.

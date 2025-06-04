@@ -29,7 +29,7 @@ std::string extension = ".lump";
  * @param val, integer value to be inserted
  * @param L, lump pointer to root lump of the lumphump.
  * 
- * @return 0, if unsuccessful. -1, otherwise.
+ * @return val, if successful. -1, otherwise.
  */
 int lump_insert(int val, lump* L){
 
@@ -41,39 +41,22 @@ int lump_insert(int val, lump* L){
     // make new node for val
     node* N = new node;
     if (N == NULL){
+        // failure
         return -1;
     }
     N->val = val;
 
     // check if L is empty
+    // make its only node N and return
     if (L->smallest == NULL){
         L->smallest = N;
         L->largest = N;
         return val;
     }
 
-    /* REDUNDANT?
-    // check if L has only one node
-    if (L->largest == L->smallest){
-        // check if val is <= L->smallest
-        // if so, N (val) is new smallest
-        // old smallest tracked by largest
-        if (val <= L->smallest->val){
-            N->next = L->smallest;
-            L->smallest = N;
-            return val;
-        } else {
-            // val is > (L->smallest // L->largest)
-            // N (val) is new largest
-            L->largest->next = N;
-            L->largest = N;
-            return val;
-        }
-    }
-*/
     // L is not empty
     // check if val is <= L->smallest
-    // N is new smallest
+    // then, N is new smallest, return
     if (val <= L->smallest->val){
         N->next = L->smallest;
         L->smallest->prev = N;
@@ -82,7 +65,7 @@ int lump_insert(int val, lump* L){
     }
 
     // check if val is >= L->largest
-    // N is new largest
+    // then, N is new largest, return
     if (val >= L->largest->val){
         L->largest->next = N;
         N->prev = L->largest;
@@ -91,13 +74,14 @@ int lump_insert(int val, lump* L){
     }
 
     // else, val is in the middle, 
-    // delete val's node
+    // delete val's node, the next call will make a new one.
     // check if L->next exists, if not create it and link it
     // insert val into next lump, recursively
     delete N;
     if (L->next == NULL){
         lump* nextL = new lump;
         if (nextL == NULL){
+            // failure
             return -1;
         }
         L->next = nextL;
@@ -122,36 +106,37 @@ int lump_insert(int val, lump* L){
  * @param L, lump pointer to root lump of the lumphump.
  * @param LN, lump pointer to the lump containing the node with val.
  * 
- * @return node pointer of val, if successful. NULL, otherwise.
+ * @return node pointer of val and LN points to N's lump, if successful. 
+ * @return NULL and LN points to NULL, otherwise.
  */
 node* lump_find(int val, lump* L, lump*& LN){
 
-    // check that L exists
+    // check that L exists and if its empty.
+    // if either, update LN to NULL and return NULL 
     if (L == NULL){
         LN = NULL;
         return NULL;
     }
-
-    // check that L is not empty
     if (L->smallest == NULL){
         LN = NULL;
         return NULL;
     }
 
-    // search this lump
+    // L exists and has nodes, search it
     node* N = L->smallest;
     while (N != NULL){
         if (N->val == val){
-            // found
+            // found, L is the lump containing N
             LN = L;
             return N;
         } else {
+            // not found, check next
             N = N->next;
         }
     }
 
-    // val not found in this lump, search next
-    // return value with tail recursion
+    // val not found in this lump, search next lump
+    // return value from that insertion with tail recursion
     return lump_find(val, L->next, LN);
 }
 
@@ -162,7 +147,9 @@ node* lump_find(int val, lump* L, lump*& LN){
  * @param val, integer value to be removed (if exists)
  * @param L, lump pointer to root lump of the lumphump.
  * 
- * @return -1, if unsuccessful. 0, otherwise.
+ * @return -2 if val not in lumphump
+ * @return -1, if other error
+ * @return val, if succesful.
  */
 int lump_remove(int val, lump* L){
 
@@ -177,41 +164,45 @@ int lump_remove(int val, lump* L){
 
 
     // relink neighbour nodes
+    // check if N is the smallest in LN
     if (N->prev != NULL){
-        // not the smallest
+        // not the smallest, link the smaller neighbor of N to N's larger neighbour
         N->prev->next = N->next;
     } else {
-        // is the smallest
+        // is the smallest, point LN's smallest to N's larger neighbour
         LN->smallest = N->next;
     }
+    // check if N is the largest in LN
     if (N->next != NULL){
-        // not largest
+        // not largest, link the larger neighbour of N to N's smaller neighbor
         N->next->prev = N->prev;
     } else {
-        // is largest
+        // is largest, point LN's largest to N's smaller neighbour
         LN->largest = N->prev;
     }
+
     // remove N
     delete N;
 
     // check if LN is 1 or 0 nodes
     if (LN->smallest == LN->largest){
         if (LN->smallest == NULL){
-            // LN is empty
-            // there should not be any remaining lumps, delete LN
+            // LN is empty, 0 nodes
+            // logically, there should not be any remaining lumps, 
+            // link LN's previous neighbour to NULL. 
+            // delete LN and return val
             if (LN->prev != NULL){
-                LN->prev->next = LN->next;
-            }
-            if (LN->next != NULL){
-                LN->next->prev = LN->prev;
+                LN->prev->next = NULL;
             }
             delete LN;
             return val;
         }
     }
 
-    // borrow edge nodes from next lump(s), if needed
+    // Removing val didn't remove a lump. 
+    // Must check if lump is now invalidated and borrow nodes from next lumps if it is
     if (borrow_nodes(LN) != -1){
+        // borrowing done, return val
         return val;
     }
 
@@ -228,44 +219,47 @@ int lump_remove(int val, lump* L){
  *
  * @param LN, lump pointer to lump that is being checked whether it needs to borrow from its neighbours.
  * 
- * @return -1, if unsuccessful. 0, otherwise.
+ * @return -1, if unsuccessful. 0, otherwise. (no unsuccessful conditions identified)
  */
 int borrow_nodes(lump* LN){
 
     // check if LN exists
     if (LN == NULL){
+        // No lump is valid
         return 0;
     }
     // check if LN has a next lump
     if (LN->next == NULL){
-        // nothing to borrow
+        // If nothing to borrow, no nodes to invalidate this lump
         return 0;
     }
 
 
-    // variables for borrowing
-    lump* LNn = LN->next;
-    // this nodes current smallest
-    // the next node's smallest
-    node* LNsmallest = LN->smallest;
-    node* LNnsmallest = LNn->smallest;
-    // this nodes current largest
-    // the next node's largest
-    node* LNlargest = LN->largest;
-    node* LNnlargest = LNn->largest;
-    // check LN's smallest is larger than next lump's smallest
-    // sequential nodes can have the same value smallest's (or largests)
+    // Variables for borrowing
+    lump* LNn = LN->next;               // The next lump from this one
+    node* LNsmallest = LN->smallest;    // The smallest node of this lump
+    node* LNnsmallest = LNn->smallest;  // The smallest node of the next lump
+    node* LNlargest = LN->largest;      // The largest node of this lump
+    node* LNnlargest = LNn->largest;    // The largest node of the next lump
+
+
+    // Check small side, and if borrowing there, recursion will occur from that block
+    // Code block for borrowing on large side is afterwards, and similarly recursive borrowing will call from that block.
+
+    // check if LN's smallest is larger than next lump's smallest. This is LN being invalid.
+    // Sequential lumps can have the same value smallests (or largests) nodes.
     // first check if there is a smallest node
     if (LNsmallest == NULL){
         return 0;
     }
+    // check if LN's smallest is larger than next lump's smallest
     if (LNsmallest->val > LNnsmallest->val){
-        // move LN's next's smallest node to be LN's new smallest
+        // move LN's next's smallest node to be LN's new smallest and link it
         LNn->smallest = LNnsmallest->next;
         if (LNn->smallest != NULL){
             LNn->smallest->prev = NULL;
         } else {
-            // if moving LNn's smallest made it NULL, its largest is also NULL
+            // if moving LNn's smallest made it NULL, its largest is also NULL and must be updated to reflect that
             LNn->largest = NULL;
         }
         LNnsmallest->next = LNsmallest;
@@ -273,7 +267,7 @@ int borrow_nodes(lump* LN){
         LN->smallest = LNnsmallest;
 
         // check if LN->next is now empty
-        // delete it and return
+        // if so, delete it and return
         if (LNn->smallest == NULL){
             if (LNn->prev != NULL){
                 LNn->prev->next = LNn->next;
@@ -285,11 +279,11 @@ int borrow_nodes(lump* LN){
             return 0;
         }
 
-        // borrow from the next nodes
+        // If the next node was not deleted through borrowing, check if the next lump needs to borrow too
         return borrow_nodes(LNn);
     }
 
-    // largest side
+    // first check if there is a largest node
     if (LNlargest == NULL){
         return 0;
     }
@@ -386,8 +380,18 @@ void lump_print(lump* L){
  */
 int lump_print_to_file(lump* L, std::string filename){
 
+    // check if lump exists
+    if (L == NULL){
+        return -3;
+    }
+
+    // check that L is not empty
+    if (L->smallest == NULL){
+        return -3;
+    }
 
     // check if valid filename
+    // Valid filename contains ( ( 0-9a-zA-Z ) | '-' | '_' | '.' | ' ' )+
     int len = (int)filename.size();
     if (len <= 0){
         return -1;
@@ -418,6 +422,8 @@ int lump_print_to_file(lump* L, std::string filename){
         }
     }
 
+
+    // string with location and extension appended
     std::string realFN = location + filename + extension;
 
     // check if file already exists
@@ -430,17 +436,8 @@ int lump_print_to_file(lump* L, std::string filename){
     file.close();
 
 
-    // check if lump exists
-    if (L == NULL){
-        return -3;
-    }
 
-    // check that L is not empty
-    if (L->smallest == NULL){
-        return -3;
-    }
-
-    // open file in write only mode and iterate through lumphump
+    // open file in write only mode
     std::ofstream outFile;
     outFile.open(realFN);
     if (!outFile.is_open()) {
@@ -448,13 +445,13 @@ int lump_print_to_file(lump* L, std::string filename){
     }
 
 
-    // insert "i" + newline before each number so this program can read it later
+    // iterate through lumps, and nested iterate through nodes
     lump* currL = L;
     node* N = currL->smallest;
-    // iterate through lumps, and nested iterate through nodes
     while (currL != NULL){
         while (N != NULL){
-            outFile << "i " << N->val << "\n";
+            // insert "i" + newline before each number so this program can read it later
+            outFile << "i\n" << N->val << "\n";
             N = N->next;
         }
         currL = currL->next;
@@ -462,7 +459,7 @@ int lump_print_to_file(lump* L, std::string filename){
             N = currL->smallest;
         }
     }
-    // print contents and close
+    // command for program to print contents and close
     outFile << "p\n";
     outFile << "q\n";
     outFile.close();
@@ -553,7 +550,7 @@ int getInputCode(std::string userInput){
  *
  * @param userInput, string to be checked
  * 
- * @return -1 if unsuccesful, otherwise the converted value
+ * @return std::numeric_limits<int>::max() if unsuccesful, otherwise the converted value
  */
 int getUserInt(std::string userInput){
 
@@ -565,10 +562,10 @@ int getUserInt(std::string userInput){
 
     // ones for current value, tens for its decimal power
     // curr is a char for converting input to integer value
-    int ones = 0;
-    int tens = 1;
-    char curr = '!';
-    int result = 0;
+    int ones = 0;           // base value
+    int tens = 1;           // value of the decimal position of the base value
+    char curr = '!';        // char that is converted to 'ones'
+    int result = 0;         // the running total to be returned
     for (int i = len-1; i >= 0; i--){
         curr = userInput[i];
         // check curr is a number
@@ -603,6 +600,7 @@ void lump_free(lump* L){
     if (L == NULL){
         return;
     }
+
 
     // L exists, free its Nodes
     node* curr = L->smallest;
