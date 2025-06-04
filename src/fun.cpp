@@ -1,10 +1,11 @@
 #include "../include/fun.h"
 #include <string>
 #include <limits>
+#include <iostream>
 #include <fstream>
 
-std::string location = "/output/";
-std::string extension = ".txt";
+std::string location = "output/";
+std::string extension = ".lump";
 
 
 
@@ -331,6 +332,8 @@ void lump_print(lump* L){
 // pass the root lump of the hump
 int lump_print_to_file(lump* L, std::string filename){
 
+std::cout << "000 test pritn to filename " << filename << std::endl;
+
     // check if valid filename
     int len = (int)filename.size();
     if (len <= 0){
@@ -363,6 +366,7 @@ int lump_print_to_file(lump* L, std::string filename){
     }
 
     std::string realFN = location + filename + extension;
+std::cout << "001 test pritn to realFn " << realFN << std::endl;
 
     // check if file already exists
     std::ifstream file(realFN.c_str(), std::ios::ate);
@@ -383,17 +387,43 @@ int lump_print_to_file(lump* L, std::string filename){
     if (L->smallest == NULL){
         return -3;
     }
+std::cout << "002 attempt to open " << realFN << std::endl;
 
     // open file in write only mode and iterate through lumphump
+    std::ofstream outFile;
+    outFile.open(realFN);
+    if (!outFile.is_open()) {
+        return -3;
+    }
+
+    std::cout << "003 has opened " << realFN << std::endl;
+
     // insert "i" + newline before each number so this program can read it later
-    // save current std cout buffer
-    // open new file in write only and redirect std cout to file buffer
-    // run regular print lump function
-    // close file and restore std cout buffer
-    // close
+    lump* currL = L;
+    node* N = currL->smallest;
+    // iterate through lumps, and nested iterate through nodes
+    int i = 0;
+    int j = 0;
+    while (currL != NULL){
+        std::cout << "004 lump print number " << i << std::endl;
+        i++;
+        while (N != NULL){
+            std::cout << "005 node print number " << j << ", val = " << N->val << std::endl;
+            j++;
+            outFile << "i " << N->val << "\n";
+            N = N->next;
+        }
+        currL = currL->next;
+        if (currL != NULL){
+            N = currL->smallest;
+        }
+    }
+    // print contents and close
+    outFile << "p\n";
+    outFile << "q\n";
+    outFile.close();
 
-
-    return -1;
+    return 0;
 }
 
 
