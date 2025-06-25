@@ -22,6 +22,8 @@ struct lump {
     node* largest_core = NULL;
     lump* next = NULL;
     lump* prev = NULL;
+    int small_size = 0;
+    int large_size = 0;
 };
 
 

@@ -45,6 +45,7 @@ enum class UI {
  * @return val, if successful. -1, otherwise.
  */
 int lump_insert_basic(int val, lump* L);
+int lump_insert_huskcore(int val, lump* L);
 
 
 /**

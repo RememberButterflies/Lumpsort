@@ -93,6 +93,76 @@ int lump_insert_basic(int val, lump* L){
     return -1;
 }
 
+int lump_insert_huskcore(int val, lump* L){
+/* needs to be thought out more
+    // check that L exists
+    if (L == NULL){
+        return -1;
+    }
+
+    // make new node for val
+    node* N = new node;
+    if (N == NULL){
+        // failure
+        return -1;
+    }
+    N->val = val;
+
+    // check if L is empty
+    // make its only node N, 
+    //dont set the core nodes, 
+    // do update L's small size 
+    // check and remove all cores, and return
+    if (L->smallest == NULL){
+        L->smallest = N;
+        L->largest = N;
+        L->small_size++;
+        dehusk_small(N, L);
+        return val;
+    }
+
+    // L is not empty
+    // check if val is <= L->smallest
+    // then, N is new smallest, return
+    if (val <= L->smallest->val){
+        N->next = L->smallest;
+        L->smallest->prev = N;
+        L->smallest = N;
+        L->small_size++;
+        return val;
+    }
+
+    // check if val is >= L->largest
+    // then, N is new largest, return
+    if (val >= L->largest->val){
+        L->largest->next = N;
+        N->prev = L->largest;
+        L->largest = N;
+        L->large_size++;
+        return val;
+    }
+
+    // else, val is in the middle, 
+    // delete val's node, the next call will make a new one.
+    // check if L->next exists, if not create it and link it
+    // insert val into next lump, recursively
+    delete N;
+    if (L->next == NULL){
+        lump* nextL = new lump;
+        if (nextL == NULL){
+            // failure
+            return -1;
+        }
+        L->next = nextL;
+        nextL->prev = L;
+    }
+    return lump_insert_huskcore(val, L->next);
+
+    // unknown error
+    */
+    return -1;
+}
+
 
 
 

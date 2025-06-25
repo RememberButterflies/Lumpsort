@@ -172,6 +172,16 @@ int main (){
     }
 
     // Free memory and exit
-    lump_free_basic(L);
+    switch (mode) {
+        case (int)UI::basic:
+                lump_free_basic(L);
+                break;
+        case (int)UI::huskcore:
+                break;
+        case (int)UI::huskcoresquare:
+                break;
+        default:
+                break;
+    }
     return 0;
 }
