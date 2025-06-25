@@ -17,7 +17,9 @@
 
 struct lump {
     node* smallest = NULL;
+    node* smallest_core = NULL;
     node* largest = NULL;
+    node* largest_core = NULL;
     lump* next = NULL;
     lump* prev = NULL;
 };

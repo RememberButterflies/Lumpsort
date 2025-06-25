@@ -27,6 +27,9 @@ enum class UI {
     print,
     printfile,
     quit,
+    basic,              // basic mode
+    huskcore,           // mode with husk core but no squarish
+    huskcoresquare,     // squareish husk core
     error
 };
 
@@ -41,7 +44,7 @@ enum class UI {
  * 
  * @return val, if successful. -1, otherwise.
  */
-int lump_insert(int val, lump* L);
+int lump_insert_basic(int val, lump* L);
 
 
 /**
@@ -55,7 +58,7 @@ int lump_insert(int val, lump* L);
  * 
  * @return node pointer of val, if successful. NULL, otherwise.
  */
-node* lump_find(int val, lump* L, lump*& LN);
+node* lump_find_basic(int val, lump* L, lump*& LN);
 
 
 /**
@@ -66,7 +69,7 @@ node* lump_find(int val, lump* L, lump*& LN);
  * 
  * @return -1, if unsuccessful. 0, otherwise.
  */
-int lump_remove(int val, lump* L);
+int lump_remove_basic(int val, lump* L);
 
 
 /**
@@ -79,7 +82,7 @@ int lump_remove(int val, lump* L);
  * 
  * @return -1, if unsuccessful. 0, otherwise. (no unsuccessful conditions identified)
  */
-int borrow_nodes(lump* LN);
+int borrow_nodes_basic(lump* LN);
 
 
 
@@ -91,7 +94,7 @@ int borrow_nodes(lump* LN);
  * 
  * @return void
  */
-void lump_print(lump* L);
+void lump_print_basic(lump* L);
 
 
 /**
@@ -108,7 +111,7 @@ void lump_print(lump* L);
  * @return -3, if other error.
  * @return 0, if no error.
  */
-int lump_print_to_file(lump* L, std::string filename);
+int lump_print_to_file_basic(lump* L, std::string filename);
 
 
 
@@ -149,6 +152,6 @@ int getUserInt(std::string userInput);
  * 
  * @return void
  */
-void lump_free(lump* L);
+void lump_free_basic(lump* L);
 
 #endif

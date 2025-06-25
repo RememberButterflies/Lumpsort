@@ -31,7 +31,7 @@ std::string extension = ".lump";
  * 
  * @return val, if successful. -1, otherwise.
  */
-int lump_insert(int val, lump* L){
+int lump_insert_basic(int val, lump* L){
 
     // check that L exists
     if (L == NULL){
@@ -87,7 +87,7 @@ int lump_insert(int val, lump* L){
         L->next = nextL;
         nextL->prev = L;
     }
-    return lump_insert(val, L->next);
+    return lump_insert_basic(val, L->next);
 
     // unknown error
     return -1;
@@ -109,7 +109,7 @@ int lump_insert(int val, lump* L){
  * @return node pointer of val and LN points to N's lump, if successful. 
  * @return NULL and LN points to NULL, otherwise.
  */
-node* lump_find(int val, lump* L, lump*& LN){
+node* lump_find_basic(int val, lump* L, lump*& LN){
 
     // check that L exists and if its empty.
     // if either, update LN to NULL and return NULL 
@@ -137,7 +137,7 @@ node* lump_find(int val, lump* L, lump*& LN){
 
     // val not found in this lump, search next lump
     // return value from that insertion with tail recursion
-    return lump_find(val, L->next, LN);
+    return lump_find_basic(val, L->next, LN);
 }
 
 
@@ -151,11 +151,11 @@ node* lump_find(int val, lump* L, lump*& LN){
  * @return -1, if other error
  * @return val, if succesful.
  */
-int lump_remove(int val, lump* L){
+int lump_remove_basic(int val, lump* L){
 
     // find val's node and lump
     lump* LN = NULL;
-    node* N = lump_find(val, L, LN);
+    node* N = lump_find_basic(val, L, LN);
 
     // check if node found
     if (N == NULL){
@@ -201,7 +201,7 @@ int lump_remove(int val, lump* L){
 
     // Removing val didn't remove a lump. 
     // Must check if lump is now invalidated and borrow nodes from next lumps if it is
-    if (borrow_nodes(LN) != -1){
+    if (borrow_nodes_basic(LN) != -1){
         // borrowing done, return val
         return val;
     }
@@ -221,7 +221,7 @@ int lump_remove(int val, lump* L){
  * 
  * @return -1, if unsuccessful. 0, otherwise. (no unsuccessful conditions identified)
  */
-int borrow_nodes(lump* LN){
+int borrow_nodes_basic(lump* LN){
 
     // check if LN exists
     if (LN == NULL){
@@ -280,7 +280,7 @@ int borrow_nodes(lump* LN){
         }
 
         // If the next node was not deleted through borrowing, check if the next lump needs to borrow too
-        return borrow_nodes(LNn);
+        return borrow_nodes_basic(LNn);
     }
 
     // first check if there is a largest node
@@ -316,7 +316,7 @@ int borrow_nodes(lump* LN){
         }
 
         // borrow from the next nodes
-        return borrow_nodes(LNn);
+        return borrow_nodes_basic(LNn);
     }
 
     /// nothing to borrow
@@ -334,7 +334,7 @@ int borrow_nodes(lump* LN){
  * 
  * @return void
  */
-void lump_print(lump* L){
+void lump_print_basic(lump* L){
 
     // check if lump exists
     // don't print error, it might be the end of hump
@@ -359,7 +359,7 @@ void lump_print(lump* L){
     }
     // end of lump, print new line and print next lumps
     std::cout << std::endl;
-    lump_print(L->next);
+    lump_print_basic(L->next);
     return;
 }
 
@@ -378,7 +378,7 @@ void lump_print(lump* L){
  * @return -3, if other error.
  * @return 0, if no error.
  */
-int lump_print_to_file(lump* L, std::string filename){
+int lump_print_to_file_basic(lump* L, std::string filename){
 
     // check if lump exists
     if (L == NULL){
@@ -530,6 +530,15 @@ int getInputCode(std::string userInput){
         case 'F':
                 result = (int)UI::printfile;
                 break;
+        case '0':
+                result = (int)UI::basic;
+                break;
+        case '1':
+                result = (int)UI::huskcore;
+                break;
+        case '2':
+                result = (int)UI::huskcoresquare;
+                break;
         case 'q':
         case 'Q':
                 result = (int)UI::quit;
@@ -595,7 +604,7 @@ int getUserInt(std::string userInput){
  * 
  * @return void
  */
-void lump_free(lump* L){
+void lump_free_basic(lump* L){
     // check if L exists
     if (L == NULL){
         return;
@@ -611,7 +620,7 @@ void lump_free(lump* L){
     }
 
     // free remaining lumps
-    lump_free(L->next);
+    lump_free_basic(L->next);
     return;
 
 }
