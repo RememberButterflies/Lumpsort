@@ -32,24 +32,16 @@ Then, when inserting a new value, you would recursively check, "is the value les
 ### Complexity
     Worst case scenario for the basic lumphump sorting algorithm inserting is O(N). 
     This is the max lump scenario, where there are and equivalence of N/2 comparisons to make. 
-    This is not great. But, this program is just a proof of concept. And there are ideas for improvements to O(sqrt(N)).
 ### Improvements
-    This program follows the most basic form of the algorithm. 
-    There are 2 main improvements that could be implemented.
-    First, having no core nodes would make search much faster. When searching, if the value is not in the current lump, and say its smaller, subsequent searches would search husks, not lumps. 
-    If the value does not exist, normally you need to check from the last lump back to the root, checking all of them. 
-    But, if coreless, if the searched value is less than a lumps small husk and larger than the previous lumps small husk, then it doesn't exist and searching can stop. 
-    Corelessness could be implemented on insert. After inserting, check to see if an overlap was created in a previous lump. 
-    The inside edge of husks can then be moved to the exterior edge of subsequent lump husks, as they do not overlap. 
-    This leads to the other improvement;
-    Second, If there was consistency to the size of lumps and husks, then the worst case scenario could be reduced. 
-    The best "shape" for a lumphump is square, where there are no more than sqrt(N) lumps, each with no more than sqrt(N) nodes each. 
-    And to be more ideal, each husk is (sqrt(N)/2) in size. 
-    If both corelessness / all-husk and squareishness were implemented, a search would be sqrt(N) lumps + sqrt(N) nodes for a complexity of O(sqrt(N)). 
-    The complexity of maintaining this structure may make it not worth it. Corelessness would happen on insert and squareishness could be a scheduled task.
+    I had plans for improvements. They were going to be ways to make the lumps not overlap. Also, there would be the same number of lumps as the size of each lump. This would make each lumphump like a square. 
+    I thought this would make it more efficient by limiting the worse-case scenario and the number of lumps need to search.
+    I considered these improvements further and realized that they essentially the same thing as have a sorted list with sqrt(N) index pointers throughout. 
+    For this reason, I believe this project has concluded with this initial working prototype. 
+    Perhaps in the future I will improve the printing functions to show more detail like lump sizes, and also add a random number generator. That way, the size of the data set is all that will be needed to be selected by the user.
 
 ## Use
     This program was designed and tested on Debian GNU/Linux 12 (bookworm) x86_64. It was not tested on any other system. 
+    The makefile uses gcc as the compiler. It must be installed prior to building using the method below.
 
 ### Build
     To build this program;
