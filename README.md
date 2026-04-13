@@ -27,11 +27,8 @@ Then, when inserting a new value, you would recursively check, "is the value les
     That list will be sorted. But, the core remains unsorted. 
     If, there were no core nodes, this method could be used to produce a fully sorted list. 
 ### Structure
-    Max - There are a maximum number of lumps in a hump, ( (((n-1)/2)+1) 1 single node last lump, and then each other lump is just 1 node in its small husk and 1 in its large husk ).
+    Max - There are a maximum number of lumps in a hump, ( (((n-1)/2)+1). That is, 1 single node last lump, and then each other lump is just 1 node in its small husk and 1 in its large husk ).
     Min - If there is just 1 lump, it is fully sorted. 
-### Complexity
-    Worst case scenario for the basic lumphump sorting algorithm inserting is O(N). 
-    This is the max lump scenario, where there are and equivalence of N/2 comparisons to make. 
 ### Improvements
     I had plans for improvements. They were going to be ways to make the lumps not overlap. Also, there would be the same number of lumps as the size of each lump. This would make each lumphump like a square. 
     I thought this would make it more efficient by limiting the worse-case scenario and the number of lumps need to search.
