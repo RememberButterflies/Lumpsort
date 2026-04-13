@@ -612,6 +612,7 @@ void lump_free(lump* L){
 
     // free remaining lumps
     lump_free(L->next);
+    delete L;
     return;
 
 }
